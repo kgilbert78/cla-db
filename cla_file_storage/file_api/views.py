@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from .models import File, Keyword
 from .serializer import FileSerializer, KeywordSerializer
 
+
 # Create your views here.
 class FileViewSet(viewsets.ModelViewSet):
     serializer_class = FileSerializer
@@ -10,7 +11,7 @@ class FileViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         files = File.objects.all()
         return files
-    
+
 
 class KeywordViewSet(viewsets.ModelViewSet):
     serializer_class = KeywordSerializer
