@@ -24,5 +24,3 @@ class KeywordSerializer(serializers.ModelSerializer):
     class Meta:
         model = Keyword
         fields = ["id", "associated_keyword"]
-
-    depth = 1
