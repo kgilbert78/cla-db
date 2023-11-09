@@ -27,22 +27,30 @@ class FileViewSet(viewsets.ModelViewSet):
         )
         new_file.save()
 
-        # add existing keywords by id
-        for keyword_id in data["keyword"]:
-            keyword_obj = Keyword.objects.get(id=keyword_id)
+        current_keywords = Keyword.objects.all()
+
+        # add keywords in request that aren't already in the db keywords
+        for each_keyword in data["keyword"]:
+            inDB = Keyword.objects.filter(associated_keyword=each_keyword).exists()
+            # TO DO: identify similar keywords and re-assign to existing one (ie. singular/plural or noun/verb for the same thing)
+            if inDB == False:
+                new_keyword = Keyword.objects.create(associated_keyword=each_keyword)
+                new_keyword.save()
+
+        # associate the keywords to the new file by keyword text
+        for each_keyword in data["keyword"]:
+            keyword_obj = Keyword.objects.get(associated_keyword=each_keyword)
+            # if duplicate keywords are in the db, this line will error:
+            # file_api.models.Keyword.MultipleObjectsReturned: get() returned more than one Keyword -- it returned 4!
+
             new_file.keyword.add(keyword_obj)
 
             # for POST request data format like this:
             # {
             #     "name": "filename",
             #     ...etc...
-            #     "keyword": [1,2,3]
+            #     "keyword": ["harvesting", "survey"]
             # }
-
-        # TO DO
-        # add new keywords by keyword name
-        # check that they don't exist already and only add them if they don't
-        # if they do exist, assign the existing one that matches
 
         serializer = FileSerializer(new_file)
         return Response(serializer.data)
