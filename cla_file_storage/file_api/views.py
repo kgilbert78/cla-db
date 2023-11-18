@@ -86,6 +86,20 @@ class FileViewSet(viewsets.ModelViewSet):
         serializer = FileSerializer(file_obj)
         return Response(serializer.data)
 
+    def destroy(self, request, *args, **kwargs):
+        file_obj = self.get_object()
+        file_name = file_obj.name
+        feedback = {
+            "message": f"You do not have permission to delete the file '{file_name}'."
+        }
+
+        if request.user.is_staff:
+            selected_file = self.get_object()
+            selected_file.delete()
+            feedback = {"message": f"The file '{file_name}' has been deleted"}
+
+        return Response(feedback)
+
 
 class KeywordViewSet(viewsets.ModelViewSet):
     serializer_class = KeywordSerializer
