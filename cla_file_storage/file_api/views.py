@@ -12,6 +12,15 @@ class FileViewSet(viewsets.ModelViewSet):
         files = File.objects.all()
         return files
 
+    def add_keywords(self, keyword_data):
+        # add keywords in request that aren't already in the db keywords
+        for each_keyword in keyword_data:
+            inDB = Keyword.objects.filter(associated_keyword=each_keyword).exists()
+            # TO DO: identify similar keywords and re-assign to existing one (ie. singular/plural or noun/verb for the same thing)
+            if inDB == False:
+                new_keyword = Keyword.objects.create(associated_keyword=each_keyword)
+                new_keyword.save()
+
     def create(self, request, *args, **kwargs):
         data = request.data
 
@@ -27,13 +36,7 @@ class FileViewSet(viewsets.ModelViewSet):
         )
         new_file.save()
 
-        # add keywords in request that aren't already in the db keywords
-        for each_keyword in data["keyword"]:
-            inDB = Keyword.objects.filter(associated_keyword=each_keyword).exists()
-            # TO DO: identify similar keywords and re-assign to existing one (ie. singular/plural or noun/verb for the same thing)
-            if inDB == False:
-                new_keyword = Keyword.objects.create(associated_keyword=each_keyword)
-                new_keyword.save()
+        self.add_keywords(data["keyword"])
 
         # associate the keywords to the new file by keyword text
         for each_keyword in data["keyword"]:
@@ -57,10 +60,16 @@ class FileViewSet(viewsets.ModelViewSet):
         file_obj = self.get_object()
         data = request.data
 
+        self.add_keywords(data["keyword"])
+
         keyword_ids = []
         for keyword in data["keyword"]:
+            inDB = Keyword.objects.filter(associated_keyword=keyword).exists()
+            if inDB == False:
+                new_keyword = Keyword.objects.create(associated_keyword=keyword)
+                new_keyword.save()
+
             current = Keyword.objects.get(associated_keyword=keyword)
-            print(current.id)
             keyword_ids.append(current.id)
 
         file_obj.name = data["name"]
