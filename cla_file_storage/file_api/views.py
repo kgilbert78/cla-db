@@ -100,6 +100,42 @@ class FileViewSet(viewsets.ModelViewSet):
 
         return Response(feedback)
 
+    def partial_update(self, request, *args, **kwargs):
+        file_obj = self.get_object()
+        data = request.data
+
+        keyword_ids = []
+        try:
+            self.add_keywords(data["keyword"])
+
+            for keyword in data["keyword"]:
+                inDB = Keyword.objects.filter(associated_keyword=keyword).exists()
+                if inDB == False:
+                    new_keyword = Keyword.objects.create(associated_keyword=keyword)
+                    new_keyword.save()
+
+                current = Keyword.objects.get(associated_keyword=keyword)
+                keyword_ids.append(current.id)
+        except KeyError:
+            pass
+
+        file_obj.name = data.get("name", file_obj.name)
+        file_obj.display_name = data.get("display_name", file_obj.display_name)
+        file_obj.primary_filepath = data.get(
+            "primary_filepath", file_obj.primary_filepath
+        )
+        file_obj.primary_format = data.get("primary_format", file_obj.primary_format)
+        file_obj.file_text = data.get("file_text", file_obj.file_text)
+        file_obj.category = data.get("category", file_obj.category)
+        file_obj.description = data.get("description", file_obj.description)
+        file_obj.orig_doc_date = data.get("orig_doc_date", file_obj.orig_doc_date)
+        if keyword_ids:
+            file_obj.keyword.set(keyword_ids)
+
+        file_obj.save()
+        serializer = FileSerializer(file_obj)
+        return Response(serializer.data)
+
 
 class KeywordViewSet(viewsets.ModelViewSet):
     serializer_class = KeywordSerializer
