@@ -27,8 +27,6 @@ class FileViewSet(viewsets.ModelViewSet):
         )
         new_file.save()
 
-        current_keywords = Keyword.objects.all()
-
         # add keywords in request that aren't already in the db keywords
         for each_keyword in data["keyword"]:
             inDB = Keyword.objects.filter(associated_keyword=each_keyword).exists()
@@ -53,6 +51,30 @@ class FileViewSet(viewsets.ModelViewSet):
             # }
 
         serializer = FileSerializer(new_file)
+        return Response(serializer.data)
+
+    def update(self, request, *args, **kwargs):
+        file_obj = self.get_object()
+        data = request.data
+
+        keyword_ids = []
+        for keyword in data["keyword"]:
+            current = Keyword.objects.get(associated_keyword=keyword)
+            print(current.id)
+            keyword_ids.append(current.id)
+
+        file_obj.name = data["name"]
+        file_obj.display_name = data["display_name"]
+        file_obj.primary_filepath = data["primary_filepath"]
+        file_obj.primary_format = data["primary_format"]
+        file_obj.file_text = data["file_text"]
+        file_obj.category = data["category"]
+        file_obj.description = data["description"]
+        file_obj.orig_doc_date = data["orig_doc_date"]
+        file_obj.keyword.set(keyword_ids)
+
+        file_obj.save()
+        serializer = FileSerializer(file_obj)
         return Response(serializer.data)
 
 
