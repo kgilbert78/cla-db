@@ -131,6 +131,7 @@ class FileViewSet(viewsets.ModelViewSet):
         file_obj.orig_doc_date = data.get("orig_doc_date", file_obj.orig_doc_date)
         if keyword_ids:
             file_obj.keyword.set(keyword_ids)
+        # TO DO: option to delete individual keywords
 
         file_obj.save()
         serializer = FileSerializer(file_obj)
