@@ -2,6 +2,9 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from .models import File, Keyword
 from .serializer import FileSerializer, KeywordSerializer
+from django.conf import settings
+import shutil
+import os
 
 
 # Create your views here.
@@ -24,10 +27,15 @@ class FileViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         data = request.data
 
+        initial_path = data["upload"]
+        new_path = settings.MEDIA_ROOT + data["name"] + "." + data["primary_format"]
+        shutil.copyfile(initial_path, new_path)
+
         new_file = File.objects.create(
             name=data["name"],
+            upload=data["upload"],
             display_name=data["display_name"],
-            primary_filepath=data["primary_filepath"],
+            primary_filepath=new_path,
             primary_format=data["primary_format"],
             file_text=data["file_text"],
             category=data["category"],
@@ -35,6 +43,13 @@ class FileViewSet(viewsets.ModelViewSet):
             orig_doc_date=data["orig_doc_date"],
         )
         new_file.save()
+
+        # this is how to access the data that's built into the FileField
+        print("FILE DATA:")
+        print("upload.name =", new_file.upload.name)
+        print("upload.size =", new_file.upload.size)
+        print("upload.file =", new_file.upload.file, "\n")
+        # name & file are the same - set file.name to os.path.basename?
 
         self.add_keywords(data["keyword"])
 
@@ -73,8 +88,13 @@ class FileViewSet(viewsets.ModelViewSet):
             keyword_ids.append(current.id)
 
         file_obj.name = data["name"]
+        file_obj.upload = data["upload"]
         file_obj.display_name = data["display_name"]
-        file_obj.primary_filepath = data["primary_filepath"]
+
+        if file_obj.primary_filepath != data["primary_filepath"]:
+            os.rename(file_obj.primary_filepath, data["primary_filepath"])
+            file_obj.primary_filepath = data["primary_filepath"]
+
         file_obj.primary_format = data["primary_format"]
         file_obj.file_text = data["file_text"]
         file_obj.category = data["category"]
@@ -83,6 +103,7 @@ class FileViewSet(viewsets.ModelViewSet):
         file_obj.keyword.set(keyword_ids)
 
         file_obj.save()
+
         serializer = FileSerializer(file_obj)
         return Response(serializer.data)
 
@@ -96,6 +117,8 @@ class FileViewSet(viewsets.ModelViewSet):
         if request.user.is_staff:
             selected_file = self.get_object()
             selected_file.delete()
+            # insert code to actually delete file from storage?
+            # or code to move to a designated "trash" folder on the server to look through before really deleting?
             feedback = {"message": f"The file '{file_name}' has been deleted"}
 
         return Response(feedback)
@@ -120,10 +143,15 @@ class FileViewSet(viewsets.ModelViewSet):
             pass
 
         file_obj.name = data.get("name", file_obj.name)
+        file_obj.upload = data.get("upload", file_obj.upload)
         file_obj.display_name = data.get("display_name", file_obj.display_name)
-        file_obj.primary_filepath = data.get(
-            "primary_filepath", file_obj.primary_filepath
-        )
+
+        if file_obj.primary_filepath != data["primary_filepath"]:
+            os.rename(file_obj.primary_filepath, data["primary_filepath"])
+            file_obj.primary_filepath = data.get(
+                "primary_filepath", file_obj.primary_filepath
+            )
+
         file_obj.primary_format = data.get("primary_format", file_obj.primary_format)
         file_obj.file_text = data.get("file_text", file_obj.file_text)
         file_obj.category = data.get("category", file_obj.category)

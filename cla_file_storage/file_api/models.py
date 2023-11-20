@@ -13,6 +13,7 @@ class Keyword(models.Model):
 
 class File(models.Model):
     name = models.CharField(max_length=150)  # change if using id as name
+    upload = models.FileField(upload_to="")
     display_name = models.CharField(max_length=150)
     primary_filepath = models.CharField(max_length=300)
     # ^ change to "url"?
