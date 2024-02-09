@@ -27,17 +27,17 @@ class FileViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         data = request.data
 
-        initial_path = data["upload"]
-        new_path = settings.MEDIA_ROOT + data["name"] + "." + data["primary_format"]
+        initial_path = data["document"]
+        new_path = settings.MEDIA_ROOT + data["name"] + "." + data["document_format"]
         shutil.copyfile(initial_path, new_path)
 
         new_file = File.objects.create(
             name=data["name"],
-            upload=data["upload"],
+            document=data["document"],
             display_name=data["display_name"],
-            primary_filepath=new_path,
-            primary_format=data["primary_format"],
-            file_text=data["file_text"],
+            path=new_path,
+            document_format=data["document_format"],
+            document_text=data["document_text"],
             category=data["category"],
             description=data["description"],
             orig_doc_date=data["orig_doc_date"],
@@ -46,9 +46,9 @@ class FileViewSet(viewsets.ModelViewSet):
 
         # this is how to access the data that's built into the FileField
         print("FILE DATA:")
-        print("upload.name =", new_file.upload.name)
-        print("upload.size =", new_file.upload.size)
-        print("upload.file =", new_file.upload.file, "\n")
+        print("document.name =", new_file.document.name)
+        print("document.size =", new_file.document.size)
+        print("document.file =", new_file.document.file, "\n")
         # name & file are the same - set file.name to os.path.basename?
 
         self.add_keywords(data["keyword"])
@@ -88,14 +88,14 @@ class FileViewSet(viewsets.ModelViewSet):
             keyword_ids.append(current.id)
 
         file_obj.name = data["name"]
-        file_obj.upload = data["upload"]
+        file_obj.document = data["document"]
         file_obj.display_name = data["display_name"]
 
-        if file_obj.primary_filepath != data["primary_filepath"]:
-            os.rename(file_obj.primary_filepath, data["primary_filepath"])
-            file_obj.primary_filepath = data["primary_filepath"]
+        if file_obj.path != data["path"]:
+            os.rename(file_obj.path, data["path"])
+            file_obj.path = data["path"]
 
-        file_obj.primary_format = data["primary_format"]
+        file_obj.document_format = data["document_format"]
         file_obj.file_text = data["file_text"]
         file_obj.category = data["category"]
         file_obj.description = data["description"]
@@ -143,16 +143,14 @@ class FileViewSet(viewsets.ModelViewSet):
             pass
 
         file_obj.name = data.get("name", file_obj.name)
-        file_obj.upload = data.get("upload", file_obj.upload)
+        file_obj.document = data.get("document", file_obj.document)
         file_obj.display_name = data.get("display_name", file_obj.display_name)
 
-        if file_obj.primary_filepath != data["primary_filepath"]:
-            os.rename(file_obj.primary_filepath, data["primary_filepath"])
-            file_obj.primary_filepath = data.get(
-                "primary_filepath", file_obj.primary_filepath
-            )
+        if file_obj.path != data["path"]:
+            os.rename(file_obj.path, data["path"])
+            file_obj.path = data.get("path", file_obj.path)
 
-        file_obj.primary_format = data.get("primary_format", file_obj.primary_format)
+        file_obj.document_format = data.get("document_format", file_obj.document_format)
         file_obj.file_text = data.get("file_text", file_obj.file_text)
         file_obj.category = data.get("category", file_obj.category)
         file_obj.description = data.get("description", file_obj.description)

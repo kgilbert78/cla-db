@@ -21,7 +21,7 @@ Response will be like:
 }
 ```
 
-You can now make requests to other endpoints with Header *Authorization* with a value of *Token whatever-40-character-key-the-auth-request-sent-back*
+You can now make requests to other endpoints with Header _Authorization_ with a value of _Token whatever-40-character-key-the-auth-request-sent-back_
 
 ## CLA File Storage App
 
@@ -39,10 +39,11 @@ Send requests to `http://localhost:8000/file-api/files/` with Body in format:
 ```
 {
     "name": "",
+    "document": "/home/USER/cla-db/cla_file_storage/storage/personal_computer/FILENAME.pdf",
     "display_name": "",
-    "primary_filepath": "",
-    "primary_format": "",
-    "file_text": "",
+    "path": "/home/USER/cla-db/cla_file_storage/storage/FOLDERNAME/FILENAME.pdf",
+    "document_format": "",
+    "document_text": "",
     "category": "",
     "description": "",
     "orig_doc_date": "YYYY-MM-DD",
@@ -57,10 +58,11 @@ Send requests to `http://localhost:8000/file-api/files/id/`, replacing `id` with
 ```
 {
     "name": "",
+    "document": "/home/USER/cla-db/cla_file_storage/storage/personal_computer/FILENAME.pdf",
     "display_name": "",
-    "primary_filepath": "",
-    "primary_format": "",
-    "file_text": "",
+    "path": "/home/USER/cla-db/cla_file_storage/storage/FOLDERNAME/FILENAME.pdf",
+    "document_format": "",
+    "document_text": "",
     "category": "",
     "description": "",
     "orig_doc_date": "YYYY-MM-DD",
@@ -75,10 +77,11 @@ Send requests to `http://localhost:8000/file-api/files/id/`, replacing `id` with
 ```
 {
     "name": "",
+    "document": "/home/USER/cla-db/cla_file_storage/storage/personal_computer/FILENAME.pdf",
     "display_name": "",
-    "primary_filepath": "",
-    "primary_format": "",
-    "file_text": "",
+    "path": "/home/USER/cla-db/cla_file_storage/storage/FOLDERNAME/FILENAME.pdf",
+    "document_format": "",
+    "document_text": "",
     "category": "",
     "description": "",
     "orig_doc_date": "YYYY-MM-DD",
@@ -86,7 +89,7 @@ Send requests to `http://localhost:8000/file-api/files/id/`, replacing `id` with
 }
 ```
 
-Valid request bodies include `{"primary_filepath": "updated filepath goes here"}` or  `{"keyword": ["new keyword"]}` or more than one field in one request:  `{"primary_filepath": "updated filepath goes here", "keyword": ["new keyword"]}` 
+Examples of valid request bodies include `{"path": "updated filepath goes here"}` or `{"keyword": ["new keyword"]}` or more than one field in one request: `{"path": "updated filepath goes here", "keyword": ["new keyword"]}`
 
 **DELETE:**
 
