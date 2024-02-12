@@ -15,7 +15,7 @@ class File(models.Model):
     name = models.CharField(max_length=150)  # change if using id as name
     document = models.FileField(upload_to="")
     display_name = models.CharField(max_length=150)
-    path = models.CharField(max_length=300)
+    path = models.CharField(max_length=300)  # change to FilePathField?
     # ^ change to "url"?
     document_format = models.CharField(max_length=12)
     document_text = models.TextField()

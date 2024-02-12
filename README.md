@@ -34,7 +34,22 @@ You can now make requests to other endpoints with Header _Authorization_ with a 
 
 **POST:**
 
-Send requests to `http://localhost:8000/file-api/files/` with Body in format:
+To use the postman fields:
+
+- Headers:
+
+  - Content-Type: multipart/form-data
+
+- Body:
+  - set to form-data
+
+  - Fill in as follows:
+    - Click dropdown in KEY and set to File, fill in KEY as _document_, and under VALUE use the button to open file browser and select your file.
+
+    - For the other fields: fill in KEY as text with json key, fill in VALUE as text with json value
+
+
+Here's the json format you would use, but it doesn't actually upload the file and it sets the filepath incorrectly:
 
 ```
 {
@@ -50,6 +65,8 @@ Send requests to `http://localhost:8000/file-api/files/` with Body in format:
     "keyword": ["keyword-1", "keyword-2"]
 }
 ```
+
+- TO DO: on frontend make the request with `headers: {'Content-Type': 'multpart/form-data'}` and use `new FormData()` to create the request - see [FormData MDN](https://developer.mozilla.org/en-US/docs/Web/API/FormData). Figure out how to handle this on the backend without dividing the `"keyword": ["keyword-1", "keyword-2"]` value into a list of letters as keywords. (such as `"keyword": [{"id": 21, "associated_keyword": "["}, {"id": 22, "associated_keyword": "\""}, , {"id": 23, "associated_keyword": "k"}...]` etc.)
 
 **PUT:**
 

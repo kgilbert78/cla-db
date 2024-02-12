@@ -29,7 +29,7 @@ class FileViewSet(viewsets.ModelViewSet):
 
         initial_path = data["document"]
         new_path = settings.MEDIA_ROOT + data["name"] + "." + data["document_format"]
-        shutil.copyfile(initial_path, new_path)
+        # shutil.copyfile(initial_path, new_path)
 
         new_file = File.objects.create(
             name=data["name"],
