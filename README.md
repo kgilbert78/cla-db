@@ -46,7 +46,9 @@ To use the postman fields:
   - Fill in as follows:
     - Click dropdown in KEY and set to File, fill in KEY as _document_, and under VALUE use the button to open file browser and select your file.
 
-    - For the other fields: fill in KEY as text with json key, fill in VALUE as text with json value
+    - For the Keywords: fill in KEY as text with `keyword` and fill in VALUE as text as a Python list of strings, like this `["keyword1", "keyword2", "keyword3"]` (use "double quotes")
+    
+    - For the other fields: fill in KEY as text with json key, fill in VALUE as text with json value.
 
 
 Here's the json format you would use, but it doesn't actually upload the file and it sets the filepath incorrectly:
@@ -66,7 +68,7 @@ Here's the json format you would use, but it doesn't actually upload the file an
 }
 ```
 
-- TO DO: on frontend make the request with `headers: {'Content-Type': 'multpart/form-data'}` and use `new FormData()` to create the request - see [FormData MDN](https://developer.mozilla.org/en-US/docs/Web/API/FormData). Figure out how to handle this on the backend without dividing the `"keyword": ["keyword-1", "keyword-2"]` value into a list of letters as keywords. (such as `"keyword": [{"id": 21, "associated_keyword": "["}, {"id": 22, "associated_keyword": "\""}, , {"id": 23, "associated_keyword": "k"}...]` etc.)
+- TO DO: on frontend make the request with `headers: {'Content-Type': 'multpart/form-data'}` and use `new FormData()` to create the request - see [FormData MDN](https://developer.mozilla.org/en-US/docs/Web/API/FormData). 
 
 **PUT:**
 
