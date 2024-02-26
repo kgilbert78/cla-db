@@ -1,8 +1,12 @@
 from django.db import models
+import uuid  # https://docs.python.org/3/library/uuid.html
 
 
 # Create your models here.
 class Keyword(models.Model):
+    id = models.UUIDField(
+        default=uuid.uuid4, unique=True, primary_key=True, editable=False
+    )
     associated_keyword = models.CharField(
         max_length=200
     )  # may change length - coordinate it with keyword output params
@@ -12,11 +16,12 @@ class Keyword(models.Model):
 
 
 class File(models.Model):
+    id = models.UUIDField(
+        default=uuid.uuid4, unique=True, primary_key=True, editable=False
+    )
     name = models.CharField(max_length=150)  # change if using id as name
     document = models.FileField(upload_to="")
     display_name = models.CharField(max_length=150)
-    path = models.CharField(max_length=300)  # change to FilePathField?
-    # ^ change to "url"?
     document_format = models.CharField(max_length=12)
     document_text = models.TextField()
     category = models.CharField(max_length=50)
