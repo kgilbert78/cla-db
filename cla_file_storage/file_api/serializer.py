@@ -10,7 +10,7 @@ class FileSerializer(serializers.ModelSerializer):
             "document",
             "name",
             "display_name",
-            "path",
+            # "path",
             "document_format",
             "document_text",
             "category",

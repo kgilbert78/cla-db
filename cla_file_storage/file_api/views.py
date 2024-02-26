@@ -36,7 +36,7 @@ class FileViewSet(viewsets.ModelViewSet):
             name=data["name"],
             document=data["document"],
             display_name=data["display_name"],
-            path=new_path,
+            # path=new_path,
             document_format=data["document_format"],
             document_text=data["document_text"],
             category=data["category"],
@@ -92,9 +92,9 @@ class FileViewSet(viewsets.ModelViewSet):
         file_obj.document = data["document"]
         file_obj.display_name = data["display_name"]
 
-        if file_obj.path != data["path"]:
-            os.rename(file_obj.path, data["path"])
-            file_obj.path = data["path"]
+        # if file_obj.path != data["path"]:
+        #     os.rename(file_obj.path, data["path"])
+        #     file_obj.path = data["path"]
 
         file_obj.document_format = data["document_format"]
         file_obj.file_text = data["file_text"]
@@ -147,9 +147,9 @@ class FileViewSet(viewsets.ModelViewSet):
         file_obj.document = data.get("document", file_obj.document)
         file_obj.display_name = data.get("display_name", file_obj.display_name)
 
-        if file_obj.path != data["path"]:
-            os.rename(file_obj.path, data["path"])
-            file_obj.path = data.get("path", file_obj.path)
+        # if file_obj.path != data["path"]:
+        #     os.rename(file_obj.path, data["path"])
+        #     file_obj.path = data.get("path", file_obj.path)
 
         file_obj.document_format = data.get("document_format", file_obj.document_format)
         file_obj.file_text = data.get("file_text", file_obj.file_text)
