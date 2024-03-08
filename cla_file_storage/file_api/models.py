@@ -27,6 +27,7 @@ class File(models.Model):
     category = models.CharField(max_length=50)
     description = models.TextField()
     orig_doc_date = models.DateField()
+    orig_doc_date_range_end = models.DateField()
     # option for range of dates:
     # https://docs.djangoproject.com/en/4.2/ref/contrib/postgres/fields/#daterangefield
     # varchar date_accuracy - "month day year", "month year", "year", and "decade" - perhaps better indicated with single letters: MDY, MY, Y, and D. or combine this with insight from studying date libraries
