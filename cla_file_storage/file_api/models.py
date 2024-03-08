@@ -34,8 +34,10 @@ class File(models.Model):
     keyword = models.ManyToManyField(Keyword)  # creates bridge table for me
     # https://docs.djangoproject.com/en/4.2/ref/models/fields/#manytomanyfield
 
-    # Approval stuff - may not include to start
     # timestamp upload_time
+    # upload_timestamp = models.DateField(auto_now_add=True)
+
+    # Approval stuff - may not include to start
     # varchar suggested_name
     # varchar suggested_date
     # text suggested_description

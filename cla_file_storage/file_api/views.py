@@ -1,10 +1,9 @@
+from datetime import date
 from rest_framework import viewsets
 from rest_framework.response import Response
 from .models import File, Keyword
 from .serializer import FileSerializer, KeywordSerializer
 from django.conf import settings
-import shutil
-import os
 
 
 # Create your views here.
@@ -13,6 +12,16 @@ class FileViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         files = File.objects.all()
+
+        query_start_date = self.request.query_params.get("start")
+        query_end_date = self.request.query_params.get("end")
+
+        if query_start_date is not None:
+            if query_end_date is None:
+                query_end_date = str(date.today())
+            files = File.objects.filter(
+                orig_doc_date__range=(query_start_date, query_end_date)
+            )
         return files
 
     def add_keywords(self, keyword_list):
@@ -33,6 +42,7 @@ class FileViewSet(viewsets.ModelViewSet):
         new_path = settings.MEDIA_ROOT + data["name"] + "." + data["document_format"]
 
         new_file = File.objects.create(
+            # django automatically adds "_" and random characters to end of filename if it's a duplicate name
             name=data["name"],
             document=data["document"],
             display_name=data["display_name"],
