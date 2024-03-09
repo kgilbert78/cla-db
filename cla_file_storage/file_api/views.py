@@ -3,7 +3,8 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from .models import File, Keyword
 from .serializer import FileSerializer, KeywordSerializer
-from django.conf import settings
+
+# from django.conf import settings
 
 
 # Create your views here.
@@ -39,7 +40,7 @@ class FileViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         data = request.data
 
-        new_path = settings.MEDIA_ROOT + data["name"] + "." + data["document_format"]
+        # new_path = settings.MEDIA_ROOT + data["name"] + "." + data["document_format"]
 
         new_file = File.objects.create(
             # django automatically adds "_" and random characters to end of filename if it's a duplicate name

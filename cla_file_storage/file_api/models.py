@@ -36,15 +36,25 @@ class File(models.Model):
     # https://docs.djangoproject.com/en/4.2/ref/models/fields/#manytomanyfield
 
     # timestamp upload_time
-    # upload_timestamp = models.DateField(auto_now_add=True)
+    upload_timestamp = models.DateTimeField(auto_now_add=True)
 
     # Approval stuff - may not include to start
     # varchar suggested_name
+    suggested_name = models.CharField(max_length=150)
     # varchar suggested_date
+    suggested_doc_date = models.DateField()
+    suggested_doc_date_range_end = models.DateField()
     # text suggested_description
+    suggested_description = models.TextField()
     # text suggested_keywords_list
+    suggested_keyword = models.CharField(max_length=200)
+
     # boolean approved
+    approved = models.BooleanField(default=False)
+
     # timestamp approval_time
+    approval_timestamp = models.DateTimeField(auto_now_add=True)
+
     # int uploader_user_id FK
     # int approved_by_user_id FK
 
