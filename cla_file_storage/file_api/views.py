@@ -39,6 +39,9 @@ class FileViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         data = request.data
+        user_id = request.user.uuid
+        admin_user = request.user.is_superuser
+        print(user_id, admin_user)
 
         # new_path = settings.MEDIA_ROOT + data["name"] + "." + data["document_format"]
 

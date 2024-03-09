@@ -19,6 +19,7 @@ class File(models.Model):
     id = models.UUIDField(
         default=uuid.uuid4, unique=True, primary_key=True, editable=False
     )
+
     name = models.CharField(max_length=150)  # change if using id as name
     document = models.FileField(upload_to="")
     display_name = models.CharField(max_length=150)
@@ -38,16 +39,14 @@ class File(models.Model):
     # timestamp upload_time
     upload_timestamp = models.DateTimeField(auto_now_add=True)
 
-    # Approval stuff - may not include to start
-    # varchar suggested_name
-    suggested_name = models.CharField(max_length=150)
-    # varchar suggested_date
-    suggested_doc_date = models.DateField()
-    suggested_doc_date_range_end = models.DateField()
-    # text suggested_description
-    suggested_description = models.TextField()
-    # text suggested_keywords_list
-    suggested_keyword = models.CharField(max_length=200)
+    # Approval stuff
+
+    # use these if admin changes what user submitted, otherwise blank & leave user stuff in main fields
+    uploader_suggested_name = models.CharField(max_length=150, default="")
+    uploader_suggested_doc_date = models.DateField(null=True, blank=True)
+    uploader_suggested_doc_date_range_end = models.DateField(null=True, blank=True)
+    uploader_suggested_description = models.TextField(default="")
+    uploader_suggested_keywords = models.CharField(max_length=200)
 
     # boolean approved
     approved = models.BooleanField(default=False)
